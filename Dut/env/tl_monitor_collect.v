@@ -9,10 +9,12 @@ module tl_monitor_collect#(
 )(
   input wire clock
 );
+
 `define CORE0 tb_top.l_soc.moduleInstance
 `define CORE1 tb_top.l_soc.auto_moduleInstance
 `define L3 tb_top.l_soc.l3cacheOpt
 `define DMA tb_top.l_soc.misc.axi42tl
+`define DIR tb_top.l_soc.moduleInstance.l2cache.slices_0.directory
 
 `define DCACHE_BUS_TYPE 0
 `define ICACHE_BUS_TYPE 1
@@ -20,6 +22,7 @@ module tl_monitor_collect#(
 `define L3_BUS_TYPE 3
 `define DMA_BUS_TYPE 4
 `define PTW_BUS_TYPE 5
+`define DIR_BUS_TYPE 6 
   tl_monitor#(.SIZE_WD(SIZE_WD),.ADDR_WD(ADDR_WD),.DATA_WD(DATA_WD),
     .SOURCE_WD(SOURCE_WD),.SINK_WD(SINK_WD),.USER_WD(USER_WD),.ECHO_WD(ECHO_WD)
     )core0_monitor(
@@ -415,10 +418,43 @@ module tl_monitor_collect#(
     //Channel E
     .e_sink(0),.e_valid(0),.e_ready(0)
   );
+
+  //DIR
+  dir_monitor#(
+    )dir_monitor_test(
+    .clock(clock),.id(0),.bus_type(`DIR_BUS_TYPE),
+
+    .io_dirWReq_valid(`DIR.io_dirWReq_valid),
+    .io_dirWReq_bits_set(`DIR.io_dirWReq_bits_set),
+    .io_dirWReq_bits_way(`DIR.io_dirWReq_bits_way),
+    .io_dirWReq_bits_data_dirty(`DIR.io_dirWReq_bits_data_dirty),
+    .io_dirWReq_bits_data_state(`DIR.io_dirWReq_bits_data_state),
+    .io_dirWReq_bits_data_clientStates_0(`DIR.io_dirWReq_bits_data_clientStates_0),
+    .io_dirWReq_bits_data_clientStates_1(`DIR.io_dirWReq_bits_data_clientStates_1),
+    .io_dirWReq_bits_data_prefetch(`DIR.io_dirWReq_bits_data_prefetch),
+    .io_tagWReq_valid(`DIR.io_tagWReq_valid),
+    .io_tagWReq_bits_set(`DIR.io_tagWReq_bits_set),
+    .io_tagWReq_bits_way(`DIR.io_tagWReq_bits_way),
+    .io_tagWReq_bits_tag(`DIR.io_tagWReq_bits_tag),
+    .io_clientDirWReq_valid(`DIR.io_clientDirWReq_valid),
+    .io_clientDirWReq_bits_set(`DIR.io_clientDirWReq_bits_set),
+    .io_clientDirWReq_bits_way(`DIR.io_clientDirWReq_bits_way),
+    .io_clientDirWReq_bits_data_0_state(`DIR.io_clientDirWReq_bits_data_0_state),
+    .io_clientDirWReq_bits_data_0_alias(`DIR.io_clientDirWReq_bits_data_0_alias),
+    .io_clientDirWReq_bits_data_1_state(`DIR.io_clientDirWReq_bits_data_1_state),
+    .io_clientDirWReq_bits_data_1_alias(`DIR.io_clientDirWReq_bits_data_1_alias),
+    .io_clientTagWreq_valid(`DIR.io_clientTagWreq_valid),
+    .io_clientTagWreq_bits_set(`DIR.io_clientTagWreq_bits_set),
+    .io_clientTagWreq_bits_way(`DIR.io_clientTagWreq_bits_way),
+    .io_clientTagWreq_bits_tag(`DIR.io_clientTagWreq_bits_tag)
+  );
+
+
 `undef CORE0
 `undef CORE1
 `undef L3
 `undef DMA
+`undef DIR
 
 `undef DCACHE_BUS_TYPE
 `undef ICACHE_BUS_TYPE
@@ -426,4 +462,5 @@ module tl_monitor_collect#(
 `undef L3_BUS_TYPE
 `undef DMA_BUS_TYPE
 `undef PTW_BUS_TYPE
+`undef DIR_BUS_TYPE
 endmodule

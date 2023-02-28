@@ -111,6 +111,10 @@ Emu::Emu(int argc, char **argv) {
     for (int i = NR_TILE_MONITOR + NR_L3_MONITOR; i < NR_TL_MONITOR; i++) {
       monitors[i].reset(new tl_monitor::Monitor(&Cycles, i - NR_TILE_MONITOR - NR_L3_MONITOR, DMA_BUS_TYPE));
     }
+
+    for (int i = 0; i < NR_DIR_MONITOR; i++) {
+      dir_monitors[i].reset(new tl_monitor::DIR_Monitor(&Cycles, i, DIR_BUS_TYPE));
+    }
   }
 #if VM_TRACE == 1
   if (this->enable_wave) {
@@ -147,6 +151,9 @@ void Emu::execute(uint64_t nr_cycle) {
     if(this->en_monitor){
       for(int i = 0; i < NR_TL_MONITOR; i++){
         monitors[i]->print_info();
+      }
+      for(int i = 0; i < NR_DIR_MONITOR; i++){
+        dir_monitors[i]->print_info();
       }
     }
 

@@ -1,5 +1,24 @@
 #include "Monitor.h"
 namespace tl_monitor{
+
+  //DIR
+  DIR_Monitor::DIR_Monitor(uint64_t* c, uint64_t iid, uint8_t bt):
+    cycle(c),id(iid), bus_type(bt){
+    this->info.reset(new tl_interface::DIRInfo(iid, bt));
+    tl_interface::register_dir_monitor_info(this->info);
+  }
+
+  std::shared_ptr<DIRInfo> DIR_Monitor::get_info(){
+    return this->info;
+  }
+
+  void DIR_Monitor::print_info(){
+    if(*this->info->dirWReq_valid)
+      printf("DIR_Monitor running [id] %ld [bus_type] %d\n", *this->info->id, *this->info->bus_type);
+  }
+
+
+  //TL
   Monitor::Monitor(uint64_t* c, uint64_t iid, uint8_t bt):
     cycle(c),id(iid), bus_type(bt){
     this->info.reset(new tl_interface::TLInfo(iid, bt));

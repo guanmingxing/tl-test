@@ -24,6 +24,7 @@ private:
   typedef tl_agent::ULAgent ULAgent_t;
   typedef tl_agent::CAgent CAgent_t;
   typedef tl_monitor::Monitor Monitor_t;
+  typedef tl_monitor::DIR_Monitor DIR_Monitor_t;
 
   const static int NR_AGENTS = NR_CAGENTS + NR_ULAGENTS;
   Vtb_top *dut_ptr;
@@ -32,6 +33,7 @@ private:
   std::shared_ptr<BaseAgent_t>agents[NR_AGENTS];
   std::shared_ptr<Fuzzer>fuzzers[NR_AGENTS];
   std::shared_ptr<Monitor_t>monitors[NR_TL_MONITOR];
+  std::shared_ptr<DIR_Monitor_t>dir_monitors[NR_DIR_MONITOR];
   uint64_t seed = 0, wave_begin = 0, wave_end = 0;
   bool en_monitor = false;
   bool enable_wave = true;
