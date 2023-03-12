@@ -10,23 +10,23 @@
 #include <string>
 #include <cstring>
 #include <assert.h>
-#include "../ChiselDB/chisel_db.h"
+//#include "../ChiselDB/chisel_db.h"
 
-extern uint64_t Cycles;
+//extern uint64_t Cycles;
 extern bool Verbose;
-extern bool dump_db;
+//extern bool dump_db;
 
 
-inline char* timestamp_filename(time_t t) {
-    static char buf[1024];
-    char buf_time[64];
-    strftime(buf_time, sizeof(buf_time), "%F@%T", localtime(&t));
-    char *pwd = getcwd(NULL, 0);
-    assert(pwd != NULL);
-    int len = snprintf(buf, 1024, "%s/%s", pwd, buf_time);
-    strcpy(buf + len, ".db");
-    return buf;
-}
+// inline char* timestamp_filename(time_t t) {
+//     static char buf[1024];
+//     char buf_time[64];
+//     strftime(buf_time, sizeof(buf_time), "%F@%T", localtime(&t));
+//     char *pwd = getcwd(NULL, 0);
+//     assert(pwd != NULL);
+//     int len = snprintf(buf, 1024, "%s/%s", pwd, buf_time);
+//     strcpy(buf + len, ".db");
+//     return buf;
+// }
 
 enum {
     DATASIZE = 64, // Cache line is 64B
@@ -43,11 +43,6 @@ typedef uint16_t paddr_t;
     do { \
         if (!(cond)) { \
             printf("\33[1;34m%s\n", info); \
-            printf("Cycles: %ld\33[0m\n", Cycles); \
-            if(dump_db) { \
-                time_t now = time(NULL); \
-                save_db(timestamp_filename(now)); \
-            } \
             fflush(stdout); \
             fflush(stderr); \
             assert(cond); \

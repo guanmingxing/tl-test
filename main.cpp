@@ -1,10 +1,11 @@
-#include <iostream>
-#include "Emu/Emu.h"
-
-int main(int argc, char **argv) {
-    Emu emu(argc, argv);
-    emu.reset(10);
-    emu.execute(emu.exe_cycles);
-    std::cout << std::endl << "Finished" << std::endl;
+#include "./dpi/dpi_intf.cpp"
+using namespace tl_agent;
+using namespace tl_interface;
+int main() {
+    void *intf = create_interface();
+    void *agt = create_CAgent(intf);
+    svBitVecVal* data = new uint32_t[DATASIZE/4];
+    CAgent_do_grantData(agt, 1, 2, 3, 4, data, 1);
+    CAgent_update_signal(agt);
     return 0;
 }
